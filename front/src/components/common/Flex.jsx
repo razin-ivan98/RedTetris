@@ -7,7 +7,8 @@ export const Flex = (props) => {
         direction = 'row',
         children,
         alignItems = 'stretch',
-        className
+        className,
+        withoutGap
     } = props
 
     const classNames = [className]
@@ -40,6 +41,10 @@ export const Flex = (props) => {
             break
         default:
             break
+    }
+
+    if (!withoutGap) {
+        classNames.push('flex-gap')
     }
     
     return <div

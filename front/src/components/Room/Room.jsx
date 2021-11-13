@@ -7,7 +7,7 @@ export const Room = (props) => {
         players = [],
         isFull,
         isStarted,
-        onClick
+        onClick,
     } = props
 
     const classNames = ['room']
@@ -18,7 +18,7 @@ export const Room = (props) => {
 
     return <div className={classNames.join(' ')} onClick={onClick}>
         <Flex direction="column" alignItems="start">
-            {Object.values(players).map((player) => <div>{player}</div>)}
+            {Object.values(players).map((player) => <div key={player.id}>{player.username}</div>)}
             {isFull && <div class="warning">This room is already full</div>}
             {isStarted && <div class="warning">this room is already playing</div>}
         </Flex>

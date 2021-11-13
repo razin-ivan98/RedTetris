@@ -1,0 +1,42 @@
+
+/* хак для высоты, зависимой от ширины */
+
+.container {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+    border: 2px solid grey;
+    padding: 2px;
+}
+.container:after {
+    content: "";
+    padding-top: 200%;
+    display: block;
+}          
+.content {
+    position: absolute;
+    /* transform: translate(-50%, -50%); */
+    top: 50%;
+    left: 50%;
+}
+
+.grid {
+    display: grid;
+    row-gap: 1%;
+    column-gap: 2%;
+
+    width: calc(100% - 4px);
+    position: absolute;
+    height: calc(100% - 4px);
+
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+}
+
+.box {
+    background-color: #BFBFBF;
+}
+
+.filled-box {
+    background-color: grey;
+}

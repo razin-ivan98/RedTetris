@@ -7,6 +7,7 @@ export const initStore = () => {
     const store = observable({})
 
     store.username = null
+    store.id = null
     store.gamedata = null
     store.currentFigure = null
     store.rooms = null
@@ -20,7 +21,8 @@ export const initStore = () => {
         store.currentFigure = currentFigure
     }, store)
 
-    const setUsername = bindArgs((store, username) => {
+    const setUsername = bindArgs((store, id, username) => {
+        store.id = id
         store.username = username
     }, store)
 

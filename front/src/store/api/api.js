@@ -3,6 +3,8 @@ import {
   createRoom,
   joinRoom,
   getRooms,
+  startGame,
+  gameAction,
 } from './apiRequests'
 
 import SocketIOClient from 'socket.io-client';
@@ -18,9 +20,9 @@ export const initApi = (reducers) => {
     console.log('подключился')
   })
 
-  io.on('login', ({ username }) => {
-    console.log('зарегистрирован как ' + username)
-    reducers.setUsername(username)
+  io.on('login', ({ username, id }) => {
+    console.log('зарегистрирован как ' + username + ', id: ' + id)
+    reducers.setUsername(id, username)
   })
 
   io.on('getRooms', ({ rooms }) => {
@@ -33,10 +35,17 @@ export const initApi = (reducers) => {
     reducers.setCurrentRoom(roomId)
   })
 
+  io.on('gamedata', ({ gamedata }) => {
+    console.log('новое состояние')
+    reducers.setGamedata(gamedata)
+  })
+
   return {
     joinRoom: bindArgs(joinRoom, io),
     login: bindArgs(login, io),
     createRoom: bindArgs(createRoom, io),
-    getRooms: bindArgs(getRooms, io)
+    getRooms: bindArgs(getRooms, io),
+    startGame: bindArgs(startGame, io),
+    gameAction: bindArgs(gameAction, io),
   }
 }

@@ -19,7 +19,9 @@
 /* FLEXBOX */
 .flex-column, .flex-row {
     display: flex;
-    justify-content: space-between;
+}
+
+.flex-gap {
     gap: 8px;
 }
 

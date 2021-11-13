@@ -12,7 +12,7 @@ export const LobbyPage = observer(({store}) => {
 
     useEffect(() => {
         store.getRooms()
-    }, [])
+    }, [store])
 
     const handleCreateRoom = () => {
         store.createRoom()
@@ -22,17 +22,17 @@ export const LobbyPage = observer(({store}) => {
         store.joinRoom({ id })
     }
 
-    return <div class="lobby">
+    return <div className="lobby">
         <Flex direction="column">
             <Text>Hello, { store.username }</Text>
             <Text>Choose room or create your own one</Text>
             <Flex className="roomsList" direction="column" justify="start">
-                {store.rooms && store.rooms.map((room, i) => 
+                {store.rooms && store.rooms.map((room) => 
                     <Room
                         key={room.id}
-                        players={room.players}
+                        players={Object.values(room.players)}
                         isFull={room.isFull}
-                        isStarted={room.isStarted}
+                        isStarted={room.isActive}
                         onClick={room.isFull || room.isStarted ? null : bindArgs(handleJoinRoom, room.id)}
                     />
                 )}

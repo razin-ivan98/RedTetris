@@ -13,3 +13,11 @@ export const joinRoom = (io, data) => {
 export const getRooms = (io) => {
     io.emit('getRooms')
 }
+
+export const startGame = (io) => {
+    io.emit('startGame')
+}
+
+export const gameAction = (io, data) => {
+    io.emit('gameAction', data)
+}
