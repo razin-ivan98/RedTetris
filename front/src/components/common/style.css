@@ -1,0 +1,56 @@
+.block {
+    display: block;
+}
+
+.button, .input {
+    padding: 8px;
+    outline: none;
+    border: none;
+    border-radius: 3px;
+    background-color: #BFBFBF;
+    color: #fff;
+}
+
+.text {
+    margin: 0;
+    color: #767676;
+}
+
+/* FLEXBOX */
+.flex-column, .flex-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+/* flexbox-direction */
+.flex-column {
+    flex-direction: column;
+}
+.flex-row {
+    flex-direction: row;
+}
+
+/* flex-justify */
+
+.flex-justify-between {
+    justify-content: space-between
+}
+.flex-justify-start {
+    justify-content: start;
+}
+.flex-justify-center {
+    justify-content: center;
+}
+
+
+/* flexbox-align-items */
+.flex-align-start {
+    align-items: flex-start;
+}
+.flex-align-center {
+    align-items: center;
+}
+.flex-align-stretch {
+    align-items: stretch;
+}

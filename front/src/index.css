@@ -1,0 +1,22 @@
+@font-face {
+  font-family: Digital;
+  src: url(static/Digital.ttf);
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #BFBFBF;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  font-family: Digital;
+  font-size: x-large;
+  box-sizing: border-box;
+}
