@@ -14,7 +14,7 @@ export const LoginPage = () => {
     const { store } = useContext(AppContext)
 
     const handleLogin = () => {
-        if (!store) {
+        if (!store || !username) {
             return
         }
 
@@ -24,8 +24,8 @@ export const LoginPage = () => {
     return <React.Fragment>
         <Flex direction="column">
             <Text>Enter your name</Text>
-            <Input placeholder="Nagibator_9000" value={username} onChange={changeUsername} />
-            <Button onClick={handleLogin}>LOGIN</Button>
+            <Input placeholder="Nagibator_9000" value={ username } onChange={ changeUsername } />
+            <Button onClick={ handleLogin }>LOGIN</Button>
         </Flex>
     </React.Fragment>
 }

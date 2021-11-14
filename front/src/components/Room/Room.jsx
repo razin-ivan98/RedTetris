@@ -2,7 +2,7 @@ import React from 'react'
 import { Flex } from '../common/Flex'
 import './style.css'
 
-export const Room = (props) => {
+export const Room = props => {
     const {
         players = [],
         isFull,
@@ -16,11 +16,11 @@ export const Room = (props) => {
         classNames.push('unavailable')
     }
 
-    return <div className={classNames.join(' ')} onClick={onClick}>
+    return <div className={ classNames.join(' ') } onClick={ onClick }>
         <Flex direction="column" alignItems="start">
-            {Object.values(players).map((player) => <div key={player.id}>{player.username}</div>)}
-            {isFull && <div class="warning">This room is already full</div>}
-            {isStarted && <div class="warning">this room is already playing</div>}
+            { Object.values(players).map(player => <div key={ player.id }>{ player.username }</div>) }
+            { isFull && <div className="warning">This room is already full</div> }
+            { isStarted && <div className="warning">this room is already playing</div> }
         </Flex>
     </div>
 }

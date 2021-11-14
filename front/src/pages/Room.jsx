@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { Game } from '../components/Game/Game'
 import { Flex } from '../components/common/Flex'
+import { Text } from '../components/common/Text'
 import { Button } from '../components/common/Button'
 
 import './Room.css'
 
-export const RoomPage = observer((props) => {
+export const RoomPage = observer(props => {
 
     const {
         store,
@@ -18,15 +19,32 @@ export const RoomPage = observer((props) => {
         if (id === store.id) {
             return null
         }
-        return <Game key={`game-${id}`} gamedata={game} />
-    }) : []
+
+        return <Flex key={`game-${id}`} direction='column'>
+            <Text className='otherTitle' ellipsis>{ game.username }</Text>
+            <Game gamedata={ game.gamedata } losed={game.losed} wined={game.wined} />
+        </Flex>
+    }).filter(Boolean) : []
 
     const handleStartGame = () => {
-        store.startGame()
+        store.startGame({ infMode: false })
+    }
+    const handleStartGameInfMode = () => {
+        store.startGame({ infMode: true })
     }
 
     useEffect(() => {
-        const handleKeyDown = (e) => {
+        const handleKeyDown = e => {
+            if (
+                !store.gamedata
+                || !store.gamedata[store.id]
+                || store.gamedata[store.id].losed
+                || store.gamedata[store.id].wined
+                || !store.gamedata[store.id].isActive
+            ) {
+                return
+            }
+
             switch (e.code) {
                 case 'ArrowLeft':
                     store.gameAction({ type: 'left' })
@@ -36,6 +54,9 @@ export const RoomPage = observer((props) => {
                     break;
                 case 'ArrowUp':
                     store.gameAction({ type: 'rotate' })
+                    break;
+                case 'ArrowDown':
+                    store.gameAction({ type: 'speed' })
                     break;
                 case 'Space':
                     store.gameAction({ type: 'drop' })
@@ -52,15 +73,40 @@ export const RoomPage = observer((props) => {
     }, [store]);
 
     const isMy = store.currentRoom === store.id
+    const isActive = mainGamedata && mainGamedata.isActive
+    const isSoloGame = store.gamedata && Object.values(store.gamedata).length === 1
+    const wined = mainGamedata && mainGamedata.wined
+    const losed = mainGamedata && mainGamedata.losed
+
+    const roomOwner = (store.gamedata
+        && store.gamedata[store.currentRoom]
+        && store.gamedata[store.currentRoom].username)
+        || 'UNKNOWN'
+
+    const handleExit = () => {
+        store.leaveRoom()
+    }
 
     return <div>
-        <Flex direction="row">
-            <Flex direction="column" className="otherGame">
-                {otherGamedata}
+        <Flex direction="column">
+            <Flex direction="row" alignItems="center">
+                <Button onClick={handleExit}>Exit</Button>
+                <Text>{ roomOwner }'s room</Text>
             </Flex>
-            <Flex direction="column" className="mainGame">
-                <Game gamedata={mainGamedata} />
-                {isMy && <Button onClick={handleStartGame}>Start game</Button>}
+            <Flex direction="row">
+                { otherGamedata.length ? <Flex direction="column" className="otherGame"  justify="start">
+                    { otherGamedata }
+                </Flex> : null }
+                <Flex direction="column" className="mainGame">
+                    <Text ellipsis>{ mainGamedata && mainGamedata.username }</Text>
+                    <Game
+                        gamedata={ mainGamedata && mainGamedata.gamedata }
+                        losed={losed}
+                        wined={wined}
+                    />
+                    { isMy && !isActive && !isSoloGame && <Button onClick={ handleStartGame }>Start</Button> }
+                    { isMy && !isActive && <Button onClick={ handleStartGameInfMode }>Start Inf Mode</Button> }
+                </Flex>
             </Flex>
         </Flex>
     </div>

@@ -3,8 +3,16 @@ import './style.css'
 
 export const Text = (props) => {
     const {
-        children
+        children,
+        ellipsis,
+        className
     } = props
 
-    return <p className="text">{ children }</p>
+    const classNames = [className, 'text']
+
+    if (ellipsis) {
+        classNames.push('ellipsis')
+    }
+
+    return <p className={ classNames.join(" ") }>{ children }</p>
 }

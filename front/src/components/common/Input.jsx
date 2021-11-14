@@ -8,7 +8,7 @@ export const Input = (props) => {
         placeholder
     } = props
 
-    const handleChange = (e) => {
+    const handleChange = e => {
         if (onChange) {
             onChange(e.target.value)
         }
@@ -17,8 +17,8 @@ export const Input = (props) => {
     return <input
         className="block input"
         type="text"
-        value={value}
-        placeholder={placeholder}
-        onChange={handleChange}
+        value={ value }
+        placeholder={ placeholder }
+        onChange={ handleChange }
     />
 }

@@ -25,7 +25,9 @@ const App = observer(({ store }) => {
                   : <LobbyPage store={store} />}
             </Route>
             <Route exact path="/room/:id">
-              {!store.username ? <Redirect to="/" /> : <RoomPage store={store} />}
+              {!store.username ? <Redirect to="/" />
+                : store.currentRoom ? <RoomPage store={store} />
+                  : <Redirect to="/lobby" />}
             </Route>
             
           </Switch>

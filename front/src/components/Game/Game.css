@@ -33,6 +33,24 @@
     grid-template-rows: repeat(20, 1fr);
 }
 
+.verdict {
+    position: absolute;
+    width: calc(100% + 4px);
+    min-height: 15%;
+    color: white;
+    left: -2px;
+    top: 35%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.losed {
+    background-color: red;
+}
+.wined {
+    background-color: green;
+}
+
 .box {
     background-color: #BFBFBF;
 }

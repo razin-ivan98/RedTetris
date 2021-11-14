@@ -5,6 +5,7 @@ import {
   getRooms,
   startGame,
   gameAction,
+  leaveRoom,
 } from './apiRequests'
 
 import SocketIOClient from 'socket.io-client';
@@ -47,5 +48,6 @@ export const initApi = (reducers) => {
     getRooms: bindArgs(getRooms, io),
     startGame: bindArgs(startGame, io),
     gameAction: bindArgs(gameAction, io),
+    leaveRoom: bindArgs(leaveRoom, io),
   }
 }

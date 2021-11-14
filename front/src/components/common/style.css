@@ -16,6 +16,11 @@
     color: #767676;
 }
 
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* FLEXBOX */
 .flex-column, .flex-row {
     display: flex;
@@ -39,7 +44,7 @@
     justify-content: space-between
 }
 .flex-justify-start {
-    justify-content: start;
+    justify-content: flex-start;
 }
 .flex-justify-center {
     justify-content: center;

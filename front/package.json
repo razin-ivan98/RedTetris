@@ -6,7 +6,6 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "coverage": "^0.4.1",
     "mobx": "^5.15.7",
     "mobx-react": "^6.3.1",
     "react": "^16.14.0",
@@ -19,8 +18,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "mocha --require babel-core/register --reporter spec",
+    "eject": "react-scripts eject",
+    "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov -r text --require babel-core/register mocha "
   },
   "eslintConfig": {
     "extends": [
@@ -38,6 +38,27 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-__coverage__": "^11.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "mocha": "^9.1.3",
+    "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "exclude": [
+      "build"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react",
+      "stage-0"
     ]
   }
 }

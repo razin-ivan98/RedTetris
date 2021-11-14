@@ -1,7 +1,7 @@
 import React from 'react'
 import './style.css'
 
-export const Flex = (props) => {
+export const Flex = props => {
     const {
         justify = 'between',
         direction = 'row',
@@ -48,7 +48,7 @@ export const Flex = (props) => {
     }
     
     return <div
-        className={classNames.join(' ')}
+        className={ classNames.join(' ') }
     >
         { children }
     </div>

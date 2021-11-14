@@ -5,7 +5,7 @@ class Game {
     constructor() {
         this.gamedata = []
 
-        for (let j = 0; j < 20; j++) { //optimize
+        for (let j = 0; j < 20; j++) { //optimize в функцию-генератор
             this.gamedata.push([])
             for (let i = 0; i < 10; i++) {
                 this.gamedata[j].push(0)
@@ -13,7 +13,7 @@ class Game {
         }
         this.currentFigure = null
         this.renderGamedata = []
-        for (let j = 0; j < 20; j++) { //optimize
+        for (let j = 0; j < 20; j++) { //optimize в функцию-генератор
             this.renderGamedata.push([])
             for (let i = 0; i < 10; i++) {
                 this.renderGamedata[j].push(0)
@@ -23,7 +23,6 @@ class Game {
     }
 
     start () {
-        // console.log("START GAME");
         this.isActive = true
     }
 
@@ -31,15 +30,12 @@ class Game {
         this.isActive = false
     }
 
-    // updateState() {
-
-    // }
-
     spawnFigure() {
         if (this.currentFigure) {
             return
         }
         this.currentFigure = new Figure()
+        this.isSpeeded = false
     }
 
     tick() {
@@ -59,14 +55,11 @@ class Game {
             this.currentFigure = null
             return //// поменять
         }
-        // console.log("tick");
-
 
         const nextX = this.currentFigure.x
-        const nextY = this.currentFigure.y + 1 // стандартное падение
+        let nextY = this.currentFigure.y + 1 // стандартное падение
 
         const canMove = this.isPlaceAvailable(nextX, nextY)
-        // const canMove = true
 
         if (canMove) {
             this.currentFigure.x = nextX
@@ -85,7 +78,6 @@ class Game {
         const figureX = this.currentFigure.x
         const figureY = this.currentFigure.y
 
-
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < height; j++) {
                 const gameI = figureX + i
@@ -96,6 +88,31 @@ class Game {
                 }
             }
         }
+        this.checkRows()
+    }
+
+    checkRows() {
+        let count = 0
+        let ready = false
+        while (!ready) {
+            ready = true
+            for (let i = 0; i < 20; i++) {
+                let isFilled = true
+                for (let j = 0; j < 10; j++) {
+                    if (this.gamedata[i][j] === 0) {
+                        isFilled = false
+                        break
+                    }
+                }
+                if (isFilled) {
+                    ready = false
+                    this.gamedata.splice(i, 1)
+                    this.gamedata.unshift([0,0,0,0,0,0,0,0,0,0]) // в константу
+                    count++
+                }
+            }
+        }
+        // пенальти
     }
 
     isPlaceAvailable (x, y) {
@@ -141,9 +158,9 @@ class Game {
             return
         }
         const figure = this.currentFigure
-        figure.rotateRight()
+        figure.rotateLeft()
         if (!this.isPlaceAvailable(figure.x, figure.y)) {
-            figure.rotateLeft()
+            figure.rotateRight()
         }
         this.render()
     }
@@ -152,14 +169,12 @@ class Game {
         if (!this.currentFigure || !this.currentFigure.isActive) {
             return
         }
-        // const figure = this.currentFigure.figure
         const nextX = this.currentFigure.x - 1
         const nextY = this.currentFigure.y
         const canMove = this.isPlaceAvailable(nextX, nextY)
 
         if (canMove) {
             this.currentFigure.x = nextX
-            // this.currentFigure.y = nextY
         }
         this.render()
     }
@@ -167,16 +182,17 @@ class Game {
         if (!this.currentFigure || !this.currentFigure.isActive) {
             return
         }
-        // const figure = this.currentFigure.figure
         const nextX = this.currentFigure.x + 1
         const nextY = this.currentFigure.y
         const canMove = this.isPlaceAvailable(nextX, nextY)
 
         if (canMove) {
             this.currentFigure.x = nextX
-            // this.currentFigure.y = nextY
         }
         this.render()
+    }
+    speed() {
+        this.isSpeeded = true
     }
 
     render () {
@@ -199,8 +215,6 @@ class Game {
 
         this.renderGamedata = gamedataFrame
     }
-
-
 }
 
 module.exports = Game

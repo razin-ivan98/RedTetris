@@ -24,18 +24,17 @@ class Server {
         this.app = Express()
         this.http = Http.Server(this.app)
         this.io = IO(this.http, CONFIG)
-        this.rooms = {
-            1: new Room(1, "jhjkh")
-        }
+        this._rooms = {}
         this.players = {}
+    }
+
+    get rooms() {
+        return Object.values(this._rooms).map(room => room.object)
     }
 
     initRoutes() {
         this.io.on('connection', (socket) => {
-            console.log('A user connected', socket.id);
-
             socket.on('disconnect', () => {
-                console.log('A user disconnected')
                 if (!this.players[socket.id]) { // если незарегистрирован
                     return
                 }
@@ -43,46 +42,49 @@ class Server {
                 if (!room) { //не состоит в комнате
                     return
                 }
-                // console.log("BEFORE COUNT", room.playersCount);
 
                 this.players[socket.id].leaveRoom()
 
                 socket.leave(`room-${room.id}`) // покидаем все комнаты
+
+                // socket.emit('getRooms', { rooms: this.rooms })
+
                 socket.leave('lobby')
 
-                // console.log("COUNT", room.playersCount);
+                this.io.to('lobby').emit('getRooms', { rooms: this.rooms })
+                this.io.to(`room-${room.id}`).emit('gamedata', { gamedata: this._rooms[room.id].gamedata })
+
                 if (room.playersCount === 0) {
-                    this.rooms[room.id].stop()
-                    delete this.rooms[room.id]
+                    this._rooms[room.id].stop()
+                    delete this._rooms[room.id]
                 }
 
                 delete this.players[socket.id]
             })
 
-            socket.on('login', (message) => {
-                console.log('login: ', message)
-
+            socket.on('login', ({ username }) => {
                 if (this.players[socket.id]) { // если уже есть игрок
                     return
                 }
 
-                this.players[socket.id] = new Player(socket.id, message.username)
+                this.players[socket.id] = new Player(socket.id, username)
 
                 socket.join('lobby') // присоединение к комнате лобби
 
-                socket.emit('login', { username: message.username, id: socket.id })
+                socket.emit('login', { username: username, id: socket.id })
             })
 
             socket.on('getRooms', () => {
-                console.log("getRooms");
-                socket.emit('getRooms', { rooms: Object.values(this.rooms) })
+                console.log("getRooms", this.rooms );
+                socket.emit('getRooms', { rooms: this.rooms })
+                console.log("getRoomsOK");
             })
 
             socket.on('createRoom', () => {
                 if (!this.players[socket.id]) { // если незарегистрирован
                     return
                 }
-                if (this.rooms[socket.id]) {// если на его имя уже есть комната. Сделать ошибки на это все это уже проверено у юзера
+                if (this._rooms[socket.id]) {// если на его имя уже есть комната. Сделать ошибки на это все это уже проверено у юзера
                     return
                 }
                 const room = this.players[socket.id].createRoom()
@@ -95,63 +97,89 @@ class Server {
 
                 socket.leave('lobby') // отписка от комнаты лобби
                 
-                this.rooms[socket.id] = room
-                // console.log(this.rooms);
+                this._rooms[socket.id] = room
 
-                this.io.to('lobby').emit('getRooms', { rooms: Object.values(this.rooms) }) // обновляем комнаты всем кто в лобби (я уже не там)
+                this.io.to('lobby').emit('getRooms', { rooms: this.rooms }) // обновляем комнаты всем кто в лобби (я уже не там)
+                this.io.to(`room-${socket.id}`).emit('gamedata', { gamedata: this._rooms[socket.id].gamedata })
 
                 socket.emit('join', { roomId: room.id })
-
-                // this.rooms[socket.id].start(() =>
-                //     this.io.to(`room-${socket.id}`).emit('gamedata', { gamedata: this.rooms[socket.id].gamedata })
-                // )
-
-                // console.log("createRoom");
-                // socket.emit('getRooms', {1: "room", 2: "room", 3: "room", 4: "room"})
             })
 
             socket.on('joinRoom', ({id}) => {
                 if (!this.players[socket.id]) { // если незарегистрирован
                     return
                 }
-                if (!this.rooms[id]) { //нету такой комнаты
+                if (!this._rooms[id]) { //нету такой комнаты
                     return
                 }
-                const res = this.players[socket.id].joinRoom(this.rooms[id])
+                const res = this.players[socket.id].joinRoom(this._rooms[id])
                 if (!res) {
                     return false
                 }
-                // this.rooms[id].join(socket.id, this.players[socket.id].username)
                 socket.join(`room-${id}`) // подключение к комнате сокетов
 
                 socket.leave('lobby') // отписка от комнаты лобби
 
+                this.io.to('lobby').emit('getRooms', { rooms: this.rooms }) // обновляем комнаты для лобби
+
                 socket.emit('join', { roomId: id })
-                this.io.to(`room-${id}`).emit('gamedata', { gamedata: this.rooms[id].gamedata })
-                console.log("joinRoom");
+                this.io.to(`room-${id}`).emit('gamedata', { gamedata: this._rooms[id].gamedata })
+
                 return true
-                // socket.emit('getRooms', {1: "room", 2: "room", 3: "room", 4: "room"})
             })
 
-            socket.on('startGame', () => {
+            socket.on('leaveRoom', () => {
                 if (!this.players[socket.id]) { // если незарегистрирован
                     return
                 }
-                if (!this.rooms[socket.id]) { // у тебя нету комнаты
+                if (!this.players[socket.id].room) { //не состоит в комнате
                     return
                 }
-                if (this.rooms[socket.id].isActive) { // уже запущена
+                const room = this.players[socket.id].room
+
+                socket.leave(`room-${room.id}`) // отключение от комнаты
+
+                socket.join('lobby') // подписка на лобби
+
+                this.players[socket.id].leaveRoom()
+                
+                socket.emit('join', { roomId: null })
+
+                if (room.playersCount === 0) {
+                    this._rooms[room.id].stop()
+                    delete this._rooms[room.id]
+                }
+                
+                this.io.to('lobby').emit('getRooms', { rooms: this.rooms }) // обновляем комнаты для лобби
+                if (this._rooms[room.id]) {
+                    this.io.to(`room-${room.id}`).emit('gamedata', { gamedata: this._rooms[room.id].gamedata })
+                }
+
+                return true
+            })
+
+            socket.on('startGame', ({infMode}) => {
+                if (!this.players[socket.id]) { // если незарегистрирован
+                    return
+                }
+                if (!this._rooms[socket.id]) { // у тебя нету комнаты
+                    return
+                }
+                if (this._rooms[socket.id].isActive) { // уже запущена
                     return
                 }
 
-                this.rooms[socket.id].start(() =>
-                    this.io.to(`room-${socket.id}`).emit('gamedata', { gamedata: this.rooms[socket.id].gamedata })
+                this._rooms[socket.id].clearGame()
+
+                this._rooms[socket.id].start(
+                    infMode,
+                    () => this.io.to(`room-${socket.id}`).emit('gamedata', { gamedata: this._rooms[socket.id].gamedata }),
+                    () => this.io.to('lobby').emit('getRooms', { rooms: this.rooms }) // обновляем комнаты для лобби
                 )
 
-                // socket.emit('startGame', { roomId: this.players[socket.id].room.id })
-                // console.log("joinRoom");
+                this.io.to('lobby').emit('getRooms', { rooms: this.rooms }) // обновляем комнаты для лобби
+
                 return true
-                // socket.emit('getRooms', {1: "room", 2: "room", 3: "room", 4: "room"})
             })
 
             socket.on('gameAction', ({type}) => {
@@ -164,10 +192,7 @@ class Server {
                 if (!this.players[socket.id].room.isActive) { // не запущена
                     return
                 }
-                
-                // if (!this.rooms[socket.id].isActive) { // уже проиграл
-                //     return
-                // }
+
                 const room = this.players[socket.id].room
 
                 switch (type) {
@@ -180,6 +205,9 @@ class Server {
                     case 'rotate':
                         room.rotate(socket.id)
                         break;
+                    case 'speed':
+                        room.speed(socket.id)
+                        break;
                     case 'drop':
                         room.drop(socket.id)
                         break;
@@ -188,10 +216,8 @@ class Server {
                         break;
                 }
                 this.io.to(`room-${room.id}`).emit('gamedata', { gamedata: room.gamedata })
-                // socket.emit('startGame', { roomId: this.players[socket.id].room.id })
-                // console.log("joinRoom");
+
                 return true
-                // socket.emit('getRooms', {1: "room", 2: "room", 3: "room", 4: "room"})
             })
         })
     }
@@ -207,4 +233,3 @@ const wsServer = new Server()
 
 wsServer.initRoutes()
 wsServer.listen()
-

@@ -12,25 +12,24 @@ class Figure { // Фига
         this.generateRandomFigure()
     }
 
-    rotateLeft() {
+    rotateRight() {
         this.currentShapeKey =
             this.figureTemplates[this.currentFigureKey][this.currentShapeKey - 1]
                 ? this.currentShapeKey - 1
-                : this.figureTemplates[this.currentFigureKey].length - 1
+                : Object.values(this.figureTemplates[this.currentFigureKey]).length - 1
     }
-    rotateRight() {
+    rotateLeft() {
         this.currentShapeKey =
             this.figureTemplates[this.currentFigureKey][this.currentShapeKey + 1]
                 ? this.currentShapeKey + 1
                 : 0
-        console.log(this.currentFigureKey, this.currentShapeKey);
     }
 
     generateRandomFigure() {
         const figuresKeys = Object.keys(this.figureTemplates)
         const randomFigureKey = Math.floor(Math.random() * figuresKeys.length)
         const shapeKeys = Object.keys(this.figureTemplates[randomFigureKey])
-        const randomShapeKey = Math.floor(Math.random() * (shapeKeys.length - 1))
+        const randomShapeKey = Math.floor(Math.random() * (shapeKeys.length))
 
         this.currentFigureKey = randomFigureKey
         this.currentShapeKey = randomShapeKey

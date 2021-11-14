@@ -1,6 +1,6 @@
 @font-face {
-  font-family: Digital;
-  src: url(static/Digital.ttf);
+  font-family: PocC;
+  src: url(static/pockC.ttf);
 }
 
 body {
@@ -16,7 +16,7 @@ code {
 }
 
 * {
-  font-family: Digital;
+  font-family: PocC;
   font-size: x-large;
   box-sizing: border-box;
 }

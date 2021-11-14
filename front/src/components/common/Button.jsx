@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Button = (props) => {
+export const Button = props => {
     const {
         children,
         onClick
@@ -8,8 +8,8 @@ export const Button = (props) => {
 
     return <button
         className="block button"
-        onClick={onClick}
+        onClick={ onClick }
     >
-        {children}
+        { children }
     </button>
 }

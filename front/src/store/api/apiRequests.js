@@ -14,10 +14,14 @@ export const getRooms = (io) => {
     io.emit('getRooms')
 }
 
-export const startGame = (io) => {
-    io.emit('startGame')
+export const startGame = (io, data) => {
+    io.emit('startGame', data)
 }
 
 export const gameAction = (io, data) => {
     io.emit('gameAction', data)
+}
+
+export const leaveRoom = (io) => {
+    io.emit('leaveRoom')
 }
