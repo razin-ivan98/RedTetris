@@ -9,7 +9,6 @@ import './Room.css'
 import { Checkbox } from '../components/common/Checkbox'
 
 export const RoomPage = observer(props => {
-
     const {
         store,
     } = props
@@ -35,6 +34,7 @@ export const RoomPage = observer(props => {
     const handleStartGame = () => {
         store.startGame({ infMode: false, withPenalty })
     }
+
     const handleStartGameInfMode = () => {
         store.startGame({ infMode: true, withPenalty })
     }
@@ -117,11 +117,13 @@ export const RoomPage = observer(props => {
                     />
 
                     { isMy && !isActive && <Fragment>
-                        <Flex direction='row' alignItems='center' justify='start'>
-                            <Checkbox onClick={ handleChangePenalty } checked={ withPenalty } />
-                            <Text>With penalty rows</Text>
-                        </Flex>
-                        { !isSoloGame && <Button onClick={ handleStartGame }>Start</Button> }
+                        { !isSoloGame && <Fragment>
+                            <Flex direction='row' alignItems='center' justify='start'>
+                                <Checkbox onClick={ handleChangePenalty } checked={ withPenalty } />
+                                <Text>With penalty rows</Text>
+                            </Flex>
+                            <Button onClick={ handleStartGame }>Start</Button>
+                        </Fragment>}
                         <Button onClick={ handleStartGameInfMode }>Start Inf Mode</Button>
                     </Fragment> }
 
