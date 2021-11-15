@@ -22,12 +22,14 @@ class Game {
         this.isActive = false
     }
 
-    start () {
+    start (penaltyCb) {
         this.isActive = true
+        this.penaltyCb = penaltyCb
     }
 
     stop () {
         this.isActive = false
+        this.penaltyCb = null
     }
 
     spawnFigure() {
@@ -35,7 +37,6 @@ class Game {
             return
         }
         this.currentFigure = new Figure()
-        this.isSpeeded = false
     }
 
     tick() {
@@ -48,6 +49,8 @@ class Game {
             if (!this.isPlaceAvailable(this.currentFigure.x, this.currentFigure.y)) {
                 this.stop()
             }
+            this.render()
+            return
         }
 
         if (!this.currentFigure.isActive) {
@@ -107,15 +110,15 @@ class Game {
                 if (isFilled) {
                     ready = false
                     this.gamedata.splice(i, 1)
-                    this.gamedata.unshift([0,0,0,0,0,0,0,0,0,0]) // в константу
+                    this.gamedata.unshift([0,0,0,0,0,0,0,0,0,0]) // в генератор
                     count++
                 }
             }
         }
-        // пенальти
+        count && this.penaltyCb && this.penaltyCb(count)
     }
 
-    isPlaceAvailable (x, y) {
+    isPlaceAvailable(x, y) {
         const figure = this.currentFigure.figure
         const width = figure[0].length
         const height = figure.length
@@ -135,6 +138,17 @@ class Game {
             }
         }
         return true
+    }
+
+    getPenalty(count) {
+        if (!this.isActive) {
+            return
+        }
+        for (let i = 0; i < count; i++) {
+            this.gamedata.shift()
+            this.gamedata.push([0,0,0,0,0,0,0,0,0,0]) // в генератор
+        }
+        this.render()
     }
 
     drop() {
@@ -191,11 +205,12 @@ class Game {
         }
         this.render()
     }
-    speed() {
-        this.isSpeeded = true
-    }
 
     render () {
+        if (!this.currentFigure) {
+            return
+        }
+
         const gamedataFrame = []
         const figureX = this.currentFigure.x
         const figureY = this.currentFigure.y

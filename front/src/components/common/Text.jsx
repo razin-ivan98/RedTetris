@@ -14,5 +14,5 @@ export const Text = (props) => {
         classNames.push('ellipsis')
     }
 
-    return <p className={ classNames.join(" ") }>{ children }</p>
+    return <p className={ classNames.join(' ') }>{ children }</p>
 }

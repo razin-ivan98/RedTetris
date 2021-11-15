@@ -12,22 +12,22 @@ export const AppContext = createContext({  });
 
 const App = observer(({ store }) => {
   return (
-    <div className="App">
+    <div className='App'>
       <AppContext.Provider value={{ store }}>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/">
-              {store.username ? <Redirect to="/lobby" /> : <LoginPage />}
+            <Route exact path='/'>
+              {store.username ? <Redirect to='/lobby' /> : <LoginPage />}
             </Route>
-            <Route exact path="/lobby/">
-              {!store.username ? <Redirect to="/" />
+            <Route exact path='/lobby/'>
+              {!store.username ? <Redirect to='/' />
                 : store.currentRoom ? <Redirect to={`/room/${store.currentRoom}`} />
                   : <LobbyPage store={store} />}
             </Route>
-            <Route exact path="/room/:id">
-              {!store.username ? <Redirect to="/" />
+            <Route exact path='/room/:id'>
+              {!store.username ? <Redirect to='/' />
                 : store.currentRoom ? <RoomPage store={store} />
-                  : <Redirect to="/lobby" />}
+                  : <Redirect to='/lobby' />}
             </Route>
             
           </Switch>

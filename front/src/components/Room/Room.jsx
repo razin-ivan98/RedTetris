@@ -17,10 +17,10 @@ export const Room = props => {
     }
 
     return <div className={ classNames.join(' ') } onClick={ onClick }>
-        <Flex direction="column" alignItems="start">
+        <Flex direction='column' alignItems='start'>
             { Object.values(players).map(player => <div key={ player.id }>{ player.username }</div>) }
-            { isFull && <div className="warning">This room is already full</div> }
-            { isStarted && <div className="warning">this room is already playing</div> }
+            { isFull && <div className='warning'>This room is already full</div> }
+            { isStarted && <div className='warning'>this room is already playing</div> }
         </Flex>
     </div>
 }

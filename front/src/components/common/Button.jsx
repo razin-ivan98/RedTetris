@@ -7,7 +7,7 @@ export const Button = props => {
     } = props
 
     return <button
-        className="block button"
+        className='block button'
         onClick={ onClick }
     >
         { children }

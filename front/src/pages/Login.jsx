@@ -22,9 +22,9 @@ export const LoginPage = () => {
     }
 
     return <React.Fragment>
-        <Flex direction="column">
+        <Flex direction='column'>
             <Text>Enter your name</Text>
-            <Input placeholder="Nagibator_9000" value={ username } onChange={ changeUsername } />
+            <Input placeholder='Nagibator_9000' value={ username } onChange={ changeUsername } />
             <Button onClick={ handleLogin }>LOGIN</Button>
         </Flex>
     </React.Fragment>

@@ -75,9 +75,9 @@ class Server {
             })
 
             socket.on('getRooms', () => {
-                console.log("getRooms", this.rooms );
+                console.log('getRooms', this.rooms );
                 socket.emit('getRooms', { rooms: this.rooms })
-                console.log("getRoomsOK");
+                console.log('getRoomsOK');
             })
 
             socket.on('createRoom', () => {
@@ -158,7 +158,7 @@ class Server {
                 return true
             })
 
-            socket.on('startGame', ({infMode}) => {
+            socket.on('startGame', ({ infMode, withPenalty }) => {
                 if (!this.players[socket.id]) { // если незарегистрирован
                     return
                 }
@@ -173,6 +173,7 @@ class Server {
 
                 this._rooms[socket.id].start(
                     infMode,
+                    withPenalty,
                     () => this.io.to(`room-${socket.id}`).emit('gamedata', { gamedata: this._rooms[socket.id].gamedata }),
                     () => this.io.to('lobby').emit('getRooms', { rooms: this.rooms }) // обновляем комнаты для лобби
                 )
@@ -204,9 +205,6 @@ class Server {
                         break;
                     case 'rotate':
                         room.rotate(socket.id)
-                        break;
-                    case 'speed':
-                        room.speed(socket.id)
                         break;
                     case 'drop':
                         room.drop(socket.id)

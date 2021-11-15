@@ -15,8 +15,8 @@ export const Input = (props) => {
     }
 
     return <input
-        className="block input"
-        type="text"
+        className='block input'
+        type='text'
         value={ value }
         placeholder={ placeholder }
         onChange={ handleChange }

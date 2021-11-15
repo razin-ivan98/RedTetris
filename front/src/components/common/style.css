@@ -21,6 +21,19 @@
     text-overflow: ellipsis;
 }
 
+.checkboxWrapper {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    background-color: #BFBFBF;
+    padding: 3px;
+}
+.checkbox {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
 /* FLEXBOX */
 .flex-column, .flex-row {
     display: flex;

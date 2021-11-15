@@ -14,20 +14,20 @@ export const Game = props => {
 
     return <React.Fragment>
 
-        <div className="container">
+        <div className='container'>
             { /* хак для высоты, зависимой от ширины */ }
-            <div className="content" />
+            <div className='content' />
 
-            <div className="grid">
+            <div className='grid'>
                 { gamedata.map((row, i) => row.map((cell, j) => {
-                    const boxClassName = cell === 0 ? "box" : "filled-box"
+                    const boxClassName = cell === 0 ? 'box' : 'filled-box'
 
                     return <div key={ `cell${i}*${j}` } className={ boxClassName } />
                 })) }
             </div>
 
-            { losed && <div className="verdict losed">LOSE</div>}
-            { wined && <div className="verdict wined">WIN</div>}
+            { losed && <div className='verdict losed'>LOSE</div>}
+            { wined && <div className='verdict wined'>WIN</div>}
 
         </div>
         

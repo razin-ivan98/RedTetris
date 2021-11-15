@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import { Game } from '../components/Game/Game'
 import { Flex } from '../components/common/Flex'
@@ -6,12 +6,15 @@ import { Text } from '../components/common/Text'
 import { Button } from '../components/common/Button'
 
 import './Room.css'
+import { Checkbox } from '../components/common/Checkbox'
 
 export const RoomPage = observer(props => {
 
     const {
         store,
     } = props
+
+    const [withPenalty, changeWithPenalty] = useState(false)
 
     const mainGamedata = store.gamedata ? store.gamedata[store.id] : void 0
 
@@ -21,16 +24,23 @@ export const RoomPage = observer(props => {
         }
 
         return <Flex key={`game-${id}`} direction='column'>
-            <Text className='otherTitle' ellipsis>{ game.username }</Text>
+            <Flex direction='row' alignItems='center'>
+                <Text className='otherTitle' ellipsis>{ game.username }</Text>
+                <Text className='score otherTitle'> { game.score }</Text>
+            </Flex>
             <Game gamedata={ game.gamedata } losed={game.losed} wined={game.wined} />
         </Flex>
     }).filter(Boolean) : []
 
     const handleStartGame = () => {
-        store.startGame({ infMode: false })
+        store.startGame({ infMode: false, withPenalty })
     }
     const handleStartGameInfMode = () => {
-        store.startGame({ infMode: true })
+        store.startGame({ infMode: true, withPenalty })
+    }
+
+    const handleChangePenalty = () => {
+        changeWithPenalty(!withPenalty)
     }
 
     useEffect(() => {
@@ -56,8 +66,6 @@ export const RoomPage = observer(props => {
                     store.gameAction({ type: 'rotate' })
                     break;
                 case 'ArrowDown':
-                    store.gameAction({ type: 'speed' })
-                    break;
                 case 'Space':
                     store.gameAction({ type: 'drop' })
                     break;
@@ -88,24 +96,35 @@ export const RoomPage = observer(props => {
     }
 
     return <div>
-        <Flex direction="column">
-            <Flex direction="row" alignItems="center">
+        <Flex direction='column'>
+            <Flex direction='row' alignItems='center'>
                 <Button onClick={handleExit}>Exit</Button>
                 <Text>{ roomOwner }'s room</Text>
             </Flex>
-            <Flex direction="row">
-                { otherGamedata.length ? <Flex direction="column" className="otherGame"  justify="start">
+            <Flex direction='row'>
+                { otherGamedata.length ? <Flex direction='column' className='otherGame' justify='start'>
                     { otherGamedata }
                 </Flex> : null }
-                <Flex direction="column" className="mainGame">
-                    <Text ellipsis>{ mainGamedata && mainGamedata.username }</Text>
+                <Flex direction='column' className='mainGame'>
+                    <Flex direction='row' alignItems='center'>
+                        <Text ellipsis>{ mainGamedata && mainGamedata.username }</Text>
+                        <Text className='score'> { mainGamedata && mainGamedata.score }</Text>
+                    </Flex>
                     <Game
                         gamedata={ mainGamedata && mainGamedata.gamedata }
                         losed={losed}
                         wined={wined}
                     />
-                    { isMy && !isActive && !isSoloGame && <Button onClick={ handleStartGame }>Start</Button> }
-                    { isMy && !isActive && <Button onClick={ handleStartGameInfMode }>Start Inf Mode</Button> }
+
+                    { isMy && !isActive && <Fragment>
+                        <Flex direction='row' alignItems='center' justify='start'>
+                            <Checkbox onClick={ handleChangePenalty } checked={ withPenalty } />
+                            <Text>With penalty rows</Text>
+                        </Flex>
+                        { !isSoloGame && <Button onClick={ handleStartGame }>Start</Button> }
+                        <Button onClick={ handleStartGameInfMode }>Start Inf Mode</Button>
+                    </Fragment> }
+
                 </Flex>
             </Flex>
         </Flex>

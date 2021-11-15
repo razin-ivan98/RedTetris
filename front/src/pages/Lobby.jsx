@@ -22,11 +22,11 @@ export const LobbyPage = observer(({store}) => {
         store.joinRoom({ id })
     }
 
-    return <div className="lobby">
-        <Flex direction="column">
+    return <div className='lobby'>
+        <Flex direction='column'>
             <Text>Hello, { store.username }</Text>
             <Text>Choose room or create your own one</Text>
-            <Flex className="roomsList" direction="column" justify="start">
+            <Flex className='roomsList' direction='column' justify='start'>
                 { store.rooms && store.rooms.map(room => 
                     <Room
                         key={ room.id }

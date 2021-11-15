@@ -1,6 +1,8 @@
 const Game = require('./Game')
 
-const PLAYERS_LIMIT = 3
+const PLAYERS_LIMIT = 4 // в отдельный файл с константами
+const TICK_INTERVAL = 300
+const SCORE_MULTIPLIER = 10
 
 class Room {
     constructor (id, ownername) {
@@ -21,22 +23,38 @@ class Room {
         this.tickCb = null
         this.endCb = null
         this.infMode = false
+        this.withPenalty = false
     }
 
-    start(infMode, tickCb, endCb) {
+    penalty(playerId, count) {
+        this.players[playerId].score += count * SCORE_MULTIPLIER
+
+        if (!this.withPenalty) {
+            return
+        }
+
+        for (let player of Object.values(this.players)) {
+            if (player.id !== playerId)
+                player.game.getPenalty(count * (this.playersCount - 1))
+        }
+    }
+
+    start(infMode, withPenalty, tickCb, endCb) {
         if (this.isActive) {
             return
         }
         this.infMode = infMode
+        this.withPenalty = withPenalty
         this.isActive = true
+
         for (let player of Object.values(this.players)) {
             if (player.game)
-                player.game.start()
+                player.game.start(this.penalty.bind(this, player.id))
         }
         this.tickCb = tickCb
         this.endCb = endCb
 
-        this.interval = setInterval(() => this.tick(), 300) //в константу
+        this.interval = setInterval(() => this.tick(), TICK_INTERVAL)
     }
 
     stop() {
@@ -48,6 +66,7 @@ class Room {
     clearGame(){
         this.isActive = false
         this.infMode = false
+        this.withPenalty = false
         for (let player of Object.values(this.players)) {
             player.score = 0,
             player.game = new Game(),
@@ -113,9 +132,6 @@ class Room {
     drop(playerId) {
         this.players[playerId].game.drop()
     }
-    speed(playerId) {
-        this.players[playerId].game.speed()
-    }
 
     leave(playerId) {
         if (this.players[playerId]) {
@@ -130,6 +146,7 @@ class Room {
         for (let player of Object.values(this.players)) {
             if (player.game) {
                 data[player.id] = {
+                    score: player.score,
                     username: player.username,
                     gamedata: player.game.renderGamedata,
                     isActive: this.isActive,
