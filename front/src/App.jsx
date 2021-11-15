@@ -3,9 +3,9 @@ import { HashRouter, Route, Switch, Redirect } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import './App.css';
 
-import { LoginPage } from './pages/Login'
-import { LobbyPage } from './pages/Lobby'
-import { RoomPage } from './pages/Room'
+import { LoginPage } from './pages/LoginPage'
+import { LobbyPage } from './pages/LobbyPage'
+import { RoomPage } from './pages/RoomPage'
 
 export const AppContext = createContext({  });
 
