@@ -1,8 +1,10 @@
 const Game = require('./Game')
 
-const PLAYERS_LIMIT = 4 // в отдельный файл с константами
-const TICK_INTERVAL = 300
-const SCORE_MULTIPLIER = 10
+const {
+    PLAYERS_LIMIT,
+    TICK_INTERVAL,
+    SCORE_MULTIPLIER,
+} = require('../config')
 
 class Room {
     constructor (id, ownername) {
@@ -103,7 +105,7 @@ class Room {
     }
 
     join(id, username) {
-        if (this.isFull) { //
+        if (this.isFull) {
             return false
         }
         if (this.isActive) {

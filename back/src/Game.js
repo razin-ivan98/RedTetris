@@ -1,24 +1,13 @@
+const { WIDTH, HEIGHT } = require('../config')
 const defaultGameData = require('./defaultGameData')
 const Figure = require('./Figure')
+const { generateGamedataRow, generateGamedata } = require('./generators')
 
 class Game {
     constructor() {
-        this.gamedata = []
-
-        for (let j = 0; j < 20; j++) { //optimize в функцию-генератор
-            this.gamedata.push([])
-            for (let i = 0; i < 10; i++) {
-                this.gamedata[j].push(0)
-            }
-        }
+        this.gamedata = generateGamedata()
         this.currentFigure = null
-        this.renderGamedata = []
-        for (let j = 0; j < 20; j++) { //optimize в функцию-генератор
-            this.renderGamedata.push([])
-            for (let i = 0; i < 10; i++) {
-                this.renderGamedata[j].push(0)
-            }
-        }
+        this.renderGamedata = generateGamedata()
         this.isActive = false
     }
 
@@ -110,7 +99,7 @@ class Game {
                 if (isFilled) {
                     ready = false
                     this.gamedata.splice(i, 1)
-                    this.gamedata.unshift([0,0,0,0,0,0,0,0,0,0]) // в генератор
+                    this.gamedata.unshift(generateGamedataRow())
                     count++
                 }
             }
@@ -128,9 +117,13 @@ class Game {
                 const gameI = x + i
                 const gameJ = y + j
 
-                if (figure[j][i] !== 0 && (gameI < 0 || gameI > 9 || gameJ < 0 || gameJ > 19)) { // в константы
+                if (
+                    figure[j][i] !== 0
+                    && (gameI < 0 || gameI > WIDTH - 1 || gameJ < 0 || gameJ > HEIGHT - 1)
+                ) {
                     return false
                 }
+
                 if (figure[j][i] !== 0 && this.gamedata[gameJ][gameI] !== 0) {
                     return false
                 }
@@ -146,7 +139,7 @@ class Game {
         }
         for (let i = 0; i < count; i++) {
             this.gamedata.shift()
-            this.gamedata.push([0,0,0,0,0,0,0,0,0,0]) // в генератор
+            this.gamedata.push(generateGamedataRow())
         }
         this.render()
     }

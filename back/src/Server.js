@@ -2,7 +2,6 @@ const Express = require('express')
 const Http = require('http')
 const IO = require('socket.io')
 
-const Room = require('./Room')
 const Player = require('./Player')
 
 // это для индекса
@@ -46,8 +45,6 @@ class Server {
                 this.players[socket.id].leaveRoom()
 
                 socket.leave(`room-${room.id}`) // покидаем все комнаты
-
-                // socket.emit('getRooms', { rooms: this.rooms })
 
                 socket.leave('lobby')
 
