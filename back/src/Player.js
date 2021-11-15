@@ -17,7 +17,6 @@ class Player {
         return this.room
     }
 
-
     joinRoom(room) {
         if (this.room) { //уже есть комната
             return

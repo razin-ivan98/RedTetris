@@ -1,5 +1,4 @@
 const { WIDTH, HEIGHT } = require('../config')
-const defaultGameData = require('./defaultGameData')
 const Figure = require('./Figure')
 const { generateGamedataRow, generateGamedata } = require('./generators')
 
@@ -21,16 +20,9 @@ class Game {
         this.penaltyCb = null
     }
 
-    spawnFigure() {
-        if (this.currentFigure) {
-            return
-        }
-        this.currentFigure = new Figure()
-    }
-
     tick() {
         if (!this.isActive) {
-            return
+            return false
         }
 
         if (!this.currentFigure) {
@@ -45,7 +37,7 @@ class Game {
         if (!this.currentFigure.isActive) {
             this.fixFigure()
             this.currentFigure = null
-            return //// поменять
+            return
         }
 
         const nextX = this.currentFigure.x

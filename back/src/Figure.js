@@ -1,10 +1,11 @@
+const { START_X, START_Y } = require('../config')
 const figureTemplates = require('./figureTemplates')
 
 class Figure { // Фига
     constructor() {
         this.figureTemplates = figureTemplates
-        this.x = 3
-        this.y = 0 //начальное положенее
+        this.x = START_X
+        this.y = START_Y
         this.currentShapeKey = 0
         this.currentFigureKey = 0
         this.isActive = true
@@ -12,13 +13,13 @@ class Figure { // Фига
         this.generateRandomFigure()
     }
 
-    rotateRight() {
+    rotateLeft() {
         this.currentShapeKey =
             this.figureTemplates[this.currentFigureKey][this.currentShapeKey - 1]
                 ? this.currentShapeKey - 1
                 : Object.values(this.figureTemplates[this.currentFigureKey]).length - 1
     }
-    rotateLeft() {
+    rotateRight() {
         this.currentShapeKey =
             this.figureTemplates[this.currentFigureKey][this.currentShapeKey + 1]
                 ? this.currentShapeKey + 1

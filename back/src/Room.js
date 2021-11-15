@@ -60,6 +60,9 @@ class Room {
     }
 
     stop() {
+        if (!this.isActive) {
+            return
+        }
         this.isActive = false
         this.endCb()
         clearInterval(this.interval)
