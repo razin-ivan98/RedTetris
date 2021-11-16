@@ -1,3 +1,4 @@
+import React from 'react';
 import { createContext } from 'react'
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom'
 import { observer } from 'mobx-react'
