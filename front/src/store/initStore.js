@@ -1,6 +1,9 @@
 import { observable } from 'mobx'
 import { bindArgs } from '../helpers'
 import { initApi } from './api/api'
+import SocketIOClient from 'socket.io-client';
+
+const URL = 'ws://localhost:9000'
 
 export const initStore = () => {
 
@@ -41,8 +44,9 @@ export const initStore = () => {
         setRooms,
         setCurrentRoom
     }
+    const io = SocketIOClient(URL)
 
-    const api = initApi(reducers)
+    const api = initApi(io, reducers)
 
     Object.assign(store, api)
 

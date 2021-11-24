@@ -22,12 +22,12 @@ export const RoomPage = observer(props => {
             return null
         }
 
-        return <Flex key={`game-${id}`} direction='column'>
+        return <Flex key={`game-${ id }`} direction='column'>
             <Flex direction='row' alignItems='center'>
                 <Text className='otherTitle' ellipsis>{ game.username }</Text>
-                <Text className='score otherTitle'> { game.score }</Text>
+                <Text className='score otherTitle'>{ game.score }</Text>
             </Flex>
-            <Game gamedata={ game.gamedata } losed={game.losed} wined={game.wined} />
+            <Game gamedata={ game.gamedata } losed={ game.losed } wined={ game.wined } />
         </Flex>
     }).filter(Boolean) : []
 
@@ -58,20 +58,19 @@ export const RoomPage = observer(props => {
             switch (e.code) {
                 case 'ArrowLeft':
                     store.gameAction({ type: 'left' })
-                    break;
+                    break
                 case 'ArrowRight':
                     store.gameAction({ type: 'right' })
-                    break;
+                    break
                 case 'ArrowUp':
                     store.gameAction({ type: 'rotate' })
-                    break;
+                    break
                 case 'ArrowDown':
                 case 'Space':
                     store.gameAction({ type: 'drop' })
-                    break;
-            
+                    break
                 default:
-                    break;
+                    break
             }
         }
         document.addEventListener('keydown', handleKeyDown)
@@ -112,8 +111,8 @@ export const RoomPage = observer(props => {
                     </Flex>
                     <Game
                         gamedata={ mainGamedata && mainGamedata.gamedata }
-                        losed={losed}
-                        wined={wined}
+                        losed={ losed }
+                        wined={ wined }
                     />
 
                     { isMy && !isActive && <Fragment>
@@ -123,10 +122,9 @@ export const RoomPage = observer(props => {
                                 <Text>With penalty rows</Text>
                             </Flex>
                             <Button onClick={ handleStartGame }>Start</Button>
-                        </Fragment>}
+                        </Fragment> }
                         <Button onClick={ handleStartGameInfMode }>Start Inf Mode</Button>
                     </Fragment> }
-
                 </Flex>
             </Flex>
         </Flex>

@@ -14,7 +14,7 @@ export const Game = props => {
 
     return <React.Fragment>
 
-        <div className='container'>
+        <div className='container' data-testid='game'>
             { /* хак для высоты, зависимой от ширины */ }
             <div className='content' />
 

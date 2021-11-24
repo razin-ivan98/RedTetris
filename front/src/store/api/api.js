@@ -8,17 +8,9 @@ import {
   leaveRoom,
 } from './apiRequests'
 
-import SocketIOClient from 'socket.io-client';
-
 import { bindArgs } from '../../helpers'
 
-const URL = 'ws://localhost:9000'
-
-export const initApi = (reducers) => {
-  const io = SocketIOClient(URL)
-
-  io.on('connect', () => {
-  })
+export const initApi = (io, reducers) => {
 
   io.on('login', ({ username, id }) => {
     reducers.setUsername(id, username)

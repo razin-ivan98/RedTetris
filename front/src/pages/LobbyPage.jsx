@@ -8,7 +8,7 @@ import { bindArgs } from '../helpers'
 
 import './Lobby.css'
 
-export const LobbyPage = observer(({store}) => {
+export const LobbyPage = observer(({ store }) => {
 
     useEffect(() => {
         store.getRooms()

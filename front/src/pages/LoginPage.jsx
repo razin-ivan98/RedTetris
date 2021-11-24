@@ -1,17 +1,12 @@
-import React, { useState, useContext } from 'react'
-
-import { AppContext } from '../App'
-
+import React, { useState } from 'react'
 import { Button } from '../components/common/Button'
 import { Input } from '../components/common/Input'
 import { Text } from '../components/common/Text'
 import { Flex } from '../components/common/Flex'
 
 
-export const LoginPage = () => {
+export const LoginPage = ({ store }) => {
     const [username, changeUsername] = useState('')
-
-    const { store } = useContext(AppContext)
 
     const handleLogin = () => {
         if (!store || !username) {

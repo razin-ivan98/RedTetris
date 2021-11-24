@@ -6,7 +6,7 @@ export const Checkbox = props => {
         onClick
     } = props
 
-    return <div className='checkboxWrapper' onClick={onClick}>
-        { checked && <div className='checkbox' /> }
+    return <div className='checkboxWrapper' onClick={onClick} data-testid='checkbox' >
+        { checked && <div className='checkbox' data-testid='checkbox-checked' /> }
     </div>
 }

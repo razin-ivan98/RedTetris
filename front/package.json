@@ -42,20 +42,29 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
     "@babel/preset-env": "^7.16.0",
-    "@babel/preset-react": "^7.16.0",
-    "babel-jest": "^27.3.1"
+    "@babel/preset-react": "^7.16.0"
   },
   "babel": {
     "presets": [
       "@babel/preset-env",
-      "@babel/preset-react"
+      "@babel/preset-react",
+      {
+        "plugins": [
+          "@babel/plugin-transform-runtime"
+        ]
+      }
     ]
   },
   "jest": {
     "verbose": true,
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
+      "**/*{js,jsx}",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/test/**",
+      "!**/coverage/**"
     ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
