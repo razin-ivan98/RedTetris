@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-import ReactTestUtils from 'react-dom/test-utils'; 
 import React from 'react';
 import { render, screen } from '@testing-library/react'
 import App from '../src/App'

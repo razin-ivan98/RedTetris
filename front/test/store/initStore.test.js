@@ -6,10 +6,4 @@ describe('InitStore Test', () => {
 
         expect(store).not.toBeFalsy()
     })
-
-    // it('Should set username', () => {
-    //     const store = initStore()
-    //     store.setUsername('kek')
-    //     expect(store.username).toBe('kek')
-    // })
 })

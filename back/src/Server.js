@@ -1,16 +1,9 @@
 const Express = require('express')
 const Http = require('http')
 const IO = require('socket.io')
+const favicon = require('serve-favicon')
 
 const Player = require('./Player')
-
-// это для индекса
-// app.get('/', function(req, res) {
-
-// });
-
-// вынести порт в конфиг
-
 
 const CONFIG = {
     cors: {
@@ -21,6 +14,12 @@ const CONFIG = {
 class Server {
     constructor () {
         this.app = Express()
+        this.app.get('/', function(req, res) {
+            res.sendFile(__dirname + '/front_build/index.html');
+        })
+        this.app.use(Express.static('front_build'))
+        this.app.use(favicon(__dirname + '/front_build/favicon.ico'))
+
         this.http = Http.Server(this.app)
         this.io = IO(this.http, CONFIG)
         this._rooms = {}

@@ -1,6 +1,7 @@
 @font-face {
   font-family: PocC;
-  src: url(static/pockC.ttf);
+  src: url('static/pockc-webfont.woff2') format('woff2'),
+      url('static/pockc-webfont.woff') format('woff');
 }
 
 body {
