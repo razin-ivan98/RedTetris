@@ -144,11 +144,32 @@ class Game {
         let nextY = figure.y
         const nextX = figure.x
         while (this.isPlaceAvailable(nextX, nextY)) {
-            this.currentFigure.x = nextX
-            this.currentFigure.y = nextY
+            figure.x = nextX
+            figure.y = nextY
             nextY++
         }
         figure.isActive = false
+        this.render()
+    }
+
+    forward() {
+        if (!this.currentFigure || !this.currentFigure.isActive) {
+            return
+        }
+        const figure = this.currentFigure
+        let nextY = figure.y
+        const nextX = figure.x
+        let count = 3
+        while (this.isPlaceAvailable(nextX, nextY) && count) {
+            figure.x = nextX
+            figure.y = nextY
+            nextY++
+            count--
+        }
+        if (!this.isPlaceAvailable(figure.x, figure.y + 1)) {
+            figure.isActive = false
+        }
+
         this.render()
     }
 
@@ -164,7 +185,7 @@ class Game {
         this.render()
     }
 
-    left() {/// унифицировать
+    left() {
         if (!this.currentFigure || !this.currentFigure.isActive) {
             return
         }

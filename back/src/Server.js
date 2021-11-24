@@ -205,6 +205,9 @@ class Server {
             case 'drop':
                 room.drop(socket.id)
                 break;
+            case 'forward':
+                room.forward(socket.id)
+                break;
             default:
                 break;
         }

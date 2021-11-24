@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --require babel-core/register --reporter spec",
-    "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov -r text --require babel-core/register mocha "
+    "coverage": "NODE_ENV=test nyc --include src --exclude src/front_build --all -r text -r lcov -r text --require babel-core/register mocha "
   },
   "author": "chorange",
   "license": "ISC",

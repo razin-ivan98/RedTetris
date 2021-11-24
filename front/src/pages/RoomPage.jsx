@@ -66,8 +66,10 @@ export const RoomPage = observer(props => {
                     store.gameAction({ type: 'rotate' })
                     break
                 case 'ArrowDown':
-                case 'Space':
                     store.gameAction({ type: 'drop' })
+                    break
+                case 'Space':
+                    store.gameAction({ type: 'forward' })
                     break
                 default:
                     break

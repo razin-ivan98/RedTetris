@@ -137,6 +137,9 @@ class Room {
     drop(playerId) {
         this.players[playerId].game.drop()
     }
+    forward(playerId) {
+        this.players[playerId].game.forward()
+    }
 
     leave(playerId) {
         if (this.players[playerId]) {
